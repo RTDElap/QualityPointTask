@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QualityPointTask.Tests", "Q
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QualityPointTask.Infrastructure", "QualityPointTask.Infrastructure\QualityPointTask.Infrastructure.csproj", "{5A466D5D-1EE0-430D-975B-8059B672CCDA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QualityPointTask.Services", "QualityPointTask.Services\QualityPointTask.Services.csproj", "{7ED0C276-7B01-44CC-B964-C1A431EB0F86}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{5A466D5D-1EE0-430D-975B-8059B672CCDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A466D5D-1EE0-430D-975B-8059B672CCDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A466D5D-1EE0-430D-975B-8059B672CCDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7ED0C276-7B01-44CC-B964-C1A431EB0F86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7ED0C276-7B01-44CC-B964-C1A431EB0F86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7ED0C276-7B01-44CC-B964-C1A431EB0F86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7ED0C276-7B01-44CC-B964-C1A431EB0F86}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
