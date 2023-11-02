@@ -25,7 +25,7 @@ public class RootController : ControllerBase
     /// <param name="addressParts">Адрес в формате /arg1/arg2/arg3</param>
     /// <returns></returns>
     [HttpGet("/{*addressParts}")]
-    [ProducesResponseType<AddressResult>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status421MisdirectedRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]

@@ -71,8 +71,13 @@ internal class Program
                 }
             );
         }
+        else
+        {
+            app.UseHsts();
+        }
 
         app
+        .UseHttpsRedirection()
         .UseRouting()
         .UseCors()
         .UseEndpoints
