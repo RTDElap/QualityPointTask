@@ -23,18 +23,28 @@ public static partial class ServiceCollectionExtensions
                 IHttpClientFactory? httpClientFactory = serviceProvider.GetService<IHttpClientFactory>();
 
                 if ( config is null ) 
-                    throw new ArgumentNullException("");
+                    throw new ArgumentNullException("DadataConfig не установлен");
 
                 if ( httpClientFactory is null ) 
-                    throw new ArgumentNullException("");
+                    throw new ArgumentNullException("HttpClientFactory не установлен");
 
-                return new CleanClientAsync( token: config.Value.Token, secret: config.Value.Secret, client: httpClientFactory.CreateClient(nameof(ICleanClientAsync)) );
+                return new CleanClientAsync
+                ( 
+                    token: config.Value.Token, 
+                    secret: config.Value.Secret, 
+                    client: httpClientFactory.CreateClient(nameof(ICleanClientAsync)) 
+                );
             }
         );
 
         return services;
     }
 
+    /// <summary>
+    /// Регистрирует IAddressService
+    /// </summary>
+    /// <param name="services"></param>
+    /// <returns></returns>
     public static IServiceCollection AddAddressService(this IServiceCollection services)
     {
         services.AddScoped<IAddressService, AddressService>();
