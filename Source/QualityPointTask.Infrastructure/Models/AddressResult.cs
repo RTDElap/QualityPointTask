@@ -4,6 +4,10 @@ namespace QualityPointTask.Infrastructure.Models;
 
 public class AddressResult
 {
+    /// <summary>
+    /// Полная стандартизированная строка адреса
+    /// </summary>
+    /// <value></value>
     public string? Result { get; set; }
 
     public string? Country { get; set; }
@@ -26,5 +30,9 @@ public class AddressResult
 
     public string? Block { get; set; }
 
+    /// <summary>
+    /// Пригодность к рассылке
+    /// </summary>
+    /// <value></value>
     public MailingQuality? MailingQuality { get; set; } = null;
 }

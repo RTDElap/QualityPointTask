@@ -6,17 +6,37 @@ namespace QualityPointTask.Infrastructure.Extensions;
 
 public static class InfrastructureExtensions
 {
+    /// <summary>
+    /// Парсит код из строки и возвращает MailingQuality
+    /// </summary>
+    /// <exception cref="ArgumentOutOfRangeException">Код не входит в диапазон 0-10</exception>
+    /// <exception cref="FormatException">Строка не является числом</exception>
+    /// <exception cref="OverflowException">Строка содержит слишком большое число</exception>
+    /// <param name="cqComplete">Код результата</param>
+    /// <returns>MailingQuality - Пригодность к рассылке</returns>
     public static MailingQuality ParseMailingQuality(this string cqComplete)
     {
-        int code = int.Parse(cqComplete);
-
-        return code switch
+        switch ( int.Parse(cqComplete) )
         {
-            0 => MailingQuality.Yes,
-            10 | 5 | 8 | 9 => MailingQuality.Maybe,
-            1 | 2 | 3 | 4 | 5 | 6 | 7 => MailingQuality.No,
+            case 0:
+                return MailingQuality.Yes;
 
-            _ => throw new ArgumentOutOfRangeException($"Недопустимое значение: {code}")
-        };
+            case 10:
+            case 5:
+            case 8:
+            case 9:
+                return MailingQuality.Maybe;
+
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 6:
+            case 7:
+                return MailingQuality.No;
+
+            default:
+                throw new ArgumentOutOfRangeException($"Некорректное значение: {cqComplete}");
+        }
     }
 }

@@ -7,5 +7,12 @@ namespace QualityPointTask.Core.Exceptions;
 /// </summary>
 public class NotEnoughDataException : Exception
 {
-    
+    public NotEnoughDataException() : base()
+    { }
+
+    public NotEnoughDataException(string? message) : base(message)
+    { }
+
+    public NotEnoughDataException(string? message, Exception? innerException) : base(message, innerException)
+    { }
 }

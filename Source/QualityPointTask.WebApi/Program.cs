@@ -7,35 +7,60 @@ using Microsoft.AspNetCore.Mvc;
 using QualityPointTask.Core.Services;
 using QualityPointTask.Infrastructure.Models;
 using QualityPointTask.Services;
+using QualityPointTask.WebApi.Configs;
+using QualityPointTask.WebApi.Extensions;
+
+namespace QualityPointTask.WebApi;
 
 internal class Program
 {
-    static void Main(string[] args)
+    static void ConfigureServices(WebApplicationBuilder builder)
     {
-        var builder = WebApplication.CreateBuilder(args);
-
-        Console.WriteLine( builder.Configuration.GetValue<string>("DADATA_API_KEY") );
+        builder.Services
+        .Configure<DadataConfig>
+        ( 
+            builder.Configuration.GetSection( nameof(DadataConfig) ) 
+        );
 
         builder.Services
-            .AddAutoMapper( cfg => 
+        .AddAutoMapper
+        ( 
+            cfg => 
             {
                 cfg.SourceMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
                 cfg.DestinationMemberNamingConvention = PascalCaseNamingConvention.Instance;
                 cfg.CreateMap<Address, AddressResult>();
-            })
-            .AddSingleton<ICleanClientAsync>( x =>
-            {
-                return new CleanClientAsync(token: builder.Configuration.GetValue<string>("DADATA_API_KEY"), secret: builder.Configuration.GetValue<string>("DADATA_SECRET") );
+            }
+        );
 
-            } )
-            .AddScoped<IAddressService, AddressService>()
-            .AddControllers();
+        builder.Services
+        .AddHttpClient( nameof( ICleanClientAsync ) );
+
+        builder.Services
+        .AddCleanClient()
+        .AddAddressService()
+        .AddControllers();
+    }
+
+    static void ConfigureMiddleware(WebApplication app)
+    {
+        app
+        .UseRouting()
+        .UseEndpoints
+        (
+            endpoints => endpoints.MapControllers()
+        );
+    }
+
+    static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+        
+        ConfigureServices(builder);
 
         var app = builder.Build();
 
-        app
-            .UseRouting()
-            .UseEndpoints( x => x.MapControllers() );
+        ConfigureMiddleware(app);
 
         app.Run();
     }

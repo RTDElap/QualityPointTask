@@ -2,6 +2,9 @@
 
 namespace QualityPointTask.Infrastructure.Enums;
 
+/// <summary>
+/// Пригодность к рассылке
+/// </summary>
 public enum MailingQuality : byte
 {
     // Enum для сопоставления с qc_complete (см. https://dadata.ru/api/clean/address/#qc_complete)
