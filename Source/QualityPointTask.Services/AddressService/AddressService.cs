@@ -30,21 +30,28 @@ public class AddressService : IAddressService
     /// <returns>Информация об адресе</returns>
     public async Task<AddressResult> GetAddressResultFromAsync(string[] addressParts, CancellationToken token = default)
     {
-        // Адрес для поиска
-        string sourceAddress = string.Join(' ', addressParts);
+        using ( _logger.BeginScope("Обработка адреса: {0}", addressParts) )
+        {
+            // Адрес для поиска
+            string sourceAddress = string.Join(' ', addressParts);
 
-        Address? cleanAddress = await _cleanClientAsync.Clean<Address>(sourceAddress);
+            Address? cleanAddress = await _cleanClientAsync.Clean<Address>(sourceAddress);
 
-        if ( cleanAddress is null )
-            throw new ArgumentNullException($"CleanAddress is null");
+            if ( cleanAddress is null )
+            {
+                _logger.LogInformation("Сервер вернул NULL");
 
-        ThrowExceptionIfQualityCodeIsError( cleanAddress.qc );
+                throw new ArgumentNullException($"CleanAddress is null");
+            }
 
-        AddressResult mappedResult = _mapper.Map<AddressResult>(cleanAddress);
+            ThrowExceptionIfQualityCodeIsError( cleanAddress.qc );
 
-        mappedResult.MailingQuality = cleanAddress.qc_complete.ParseMailingQuality();
+            AddressResult mappedResult = _mapper.Map<AddressResult>(cleanAddress);
 
-        return mappedResult;
+            mappedResult.MailingQuality = cleanAddress.qc_complete.ParseMailingQuality();
+
+            return mappedResult;
+        }
     }
 
     private void ThrowExceptionIfQualityCodeIsError(string qualityCode)
@@ -52,9 +59,11 @@ public class AddressService : IAddressService
         switch ( qualityCode )
         {
             case "1":
+                _logger.LogInformation("Сервер вернул qc_complete 1");
                 throw new NotEnoughDataException("Недостаточно данных для поиска.");
             
             case "3":
+                _logger.LogInformation("Сервер вернул qc_complete 3");
                 throw new UndefinedAddressException("Неоднозначный адрес.");
         }
     }

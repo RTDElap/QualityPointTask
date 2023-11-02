@@ -23,22 +23,33 @@ public class RootController : ControllerBase
     [HttpGet("/{*addressParts}")]
     public async Task<ActionResult<AddressResult>> Index(string? addressParts)
     {
-        if ( addressParts is null )
-            return BadRequest( new { Message = "Укажите данные адреса." } );
-
-        // Обрабатывать пустые вхождения (которые образуются, если вид запроса имеет "////"), нет нужды,
-        /// поскольку на итоговый результат не влияют
-        var fullAddress = addressParts.Split('/');
-
-        try
+        using ( _logger.BeginScope($"Запрос: {addressParts}") )
         {
-            var address = await _addressService.GetAddressResultFromAsync(fullAddress, default);
-        
-            return Ok( address );
-        }
-        catch ( Exception ex )
-        {
-            return HandleException( ex );
+            if ( addressParts is null )
+            {
+                _logger.LogInformation("Пустой запрос");
+
+                return BadRequest( new { Message = "Укажите данные адреса." } );
+            }
+
+            // Обрабатывать пустые вхождения (которые образуются, если вид запроса имеет "////"), нет нужды,
+            /// поскольку на итоговый результат не влияют
+            var fullAddress = addressParts.Split('/');
+
+            try
+            {
+                var address = await _addressService.GetAddressResultFromAsync(fullAddress, default);
+
+                _logger.LogInformation("Успешно выполнен");
+
+                return Ok( address );
+            }
+            catch ( Exception ex )
+            {
+                _logger.LogError("Ошибка при выполнении запроса: {0}", ex.Message);
+
+                return HandleException( ex );
+            }
         }
     }
 
