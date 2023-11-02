@@ -1,12 +1,7 @@
-using System;
 using AutoMapper;
 using Dadata;
 using Dadata.Model;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Mvc;
-using QualityPointTask.Core.Services;
 using QualityPointTask.Infrastructure.Models;
-using QualityPointTask.Services;
 using QualityPointTask.WebApi.Configs;
 using QualityPointTask.WebApi.Extensions;
 
@@ -27,6 +22,7 @@ internal class Program
         ( 
             cfg => 
             {
+                // Нужно для верного маппинга модели из Dadata
                 cfg.SourceMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
                 cfg.DestinationMemberNamingConvention = PascalCaseNamingConvention.Instance;
                 cfg.CreateMap<Address, AddressResult>();
@@ -62,8 +58,9 @@ internal class Program
     {
         if ( app.Environment.IsDevelopment() )
         {
-            app.UseSwagger();
-            app.UseSwaggerUI
+            app
+            .UseSwagger()
+            .UseSwaggerUI
             (
                 opt =>
                 {
@@ -73,11 +70,12 @@ internal class Program
         }
         else
         {
-            app.UseHsts();
+            app
+            .UseHsts()
+            .UseHttpsRedirection();
         }
 
         app
-        .UseHttpsRedirection()
         .UseRouting()
         .UseCors()
         .UseEndpoints

@@ -32,7 +32,7 @@ public class AddressService : IAddressService
     {
         using ( _logger.BeginScope("Обработка адреса: {0}", addressParts) )
         {
-            // Адрес для поиска
+            // Адрес для стандартизации
             string sourceAddress = string.Join(' ', addressParts);
 
             Address? cleanAddress = await _cleanClientAsync.Clean<Address>(sourceAddress);
