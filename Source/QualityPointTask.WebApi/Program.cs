@@ -40,12 +40,41 @@ internal class Program
         .AddCleanClient()
         .AddAddressService()
         .AddControllers();
+
+        if ( builder.Environment.IsDevelopment() )
+        {
+            builder.Services
+            .AddSwaggerGen();
+        }
+
+        builder.Services
+        .AddCors
+        (
+            setup => setup.AddDefaultPolicy
+            (
+                policy => policy.WithOrigins( "http://cleaner.dadata.ru/" )
+            )
+        );
+        
     }
 
     static void ConfigureMiddleware(WebApplication app)
     {
+        if ( app.Environment.IsDevelopment() )
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI
+            (
+                opt =>
+                {
+                    opt.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                }
+            );
+        }
+
         app
         .UseRouting()
+        .UseCors()
         .UseEndpoints
         (
             endpoints => endpoints.MapControllers()

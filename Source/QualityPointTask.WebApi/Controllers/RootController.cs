@@ -18,9 +18,17 @@ public class RootController : ControllerBase
 
     public RootController(ILogger<RootController> logger, IAddressService addressService) =>
         (_logger, _addressService) = (logger, addressService);
-
-
+    
+    /// <summary>
+    /// Возвращает адрес по его составляющим
+    /// </summary>
+    /// <param name="addressParts">Адрес в формате /arg1/arg2/arg3</param>
+    /// <returns></returns>
     [HttpGet("/{*addressParts}")]
+    [ProducesResponseType<AddressResult>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status421MisdirectedRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<AddressResult>> Index(string? addressParts)
     {
         using ( _logger.BeginScope($"Запрос: {addressParts}") )
@@ -62,17 +70,17 @@ public class RootController : ControllerBase
     {
         return exception switch
         {
-            ArgumentNullException => StatusCode( (int) HttpStatusCode.MisdirectedRequest ),
+            ArgumentNullException => StatusCode( StatusCodes.Status421MisdirectedRequest ),
 
             NotEnoughDataException => NotFound( new { Message = exception.Message } ),
 
             UndefinedAddressException => NotFound( new { Message = exception.Message } ),
 
-            ArgumentOutOfRangeException => StatusCode( (int) HttpStatusCode.InternalServerError ),
+            ArgumentOutOfRangeException => StatusCode( StatusCodes.Status421MisdirectedRequest ),
 
             HttpRequestException requestException => HandleHttpRequestException( requestException ),
 
-            _ => StatusCode( (int) HttpStatusCode.MisdirectedRequest )
+            _ => StatusCode( StatusCodes.Status500InternalServerError )
         };
     }
 

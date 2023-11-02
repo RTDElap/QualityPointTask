@@ -16,8 +16,6 @@ public class AddressResult
 
     public string? Area { get; set; }
 
-    public string? SubArea { get; set; }
-
     public string? City { get; set; }
 
     public string? CityDistrict { get; set; }
