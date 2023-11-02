@@ -20,7 +20,7 @@
 
 Перейти в папку Source/QualityPointTask.WebApi:
 
-    $ cd Source/QualityPointTask.WebApi
+    $ cd QualityPointTask/Source/QualityPointTask.WebApi
 
 Скачать все зависимости:
 
